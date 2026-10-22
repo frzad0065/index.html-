@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>پرامپت‌ساز کلاژ کاغذی</title>
+<style>
+  :root{
+    --kraft:#c9ad84;
+    --ink:#22202e;
+    --tomato:#d6452d;
+    --mustard:#e9b62f;
+    --teal:#1f766f;
+    --sheet:#fbf8f1;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    font-family:Vazirmatn,"IRANSans",Tahoma,"Segoe UI",sans-serif;
+    color:var(--ink);
+    background:
+      radial-gradient(rgba(0,0,0,.07) 1px,transparent 1.2px) 0 0/6px 6px,
+      var(--kraft);
+    line-height:1.9;
+    min-height:100vh;
+  }
+  .wrap{max-width:720px;margin:0 auto;padding:20px 14px 60px}
+
+  header{position:relative;padding:26px 8px 34px}
+  .scrap{position:absolute;z-index:0}
+  .s1{background:var(--tomato);width:120px;height:90px;top:6px;left:0;transform:rotate(-7deg);
+      clip-path:polygon(0 8%,12% 0,40% 6%,70% 0,100% 10%,94% 45%,100% 80%,72% 100%,35% 94%,6% 100%,0 60%)}
+  .s2{background:var(--mustard);width:90px;height:70px;top:50px;left:70px;transform:rotate(9deg);
+      clip-path:polygon(4% 0,100% 8%,92% 100%,0 90%)}
+  .s3{background:var(--teal);width:70px;height:110px;top:0;left:130px;transform:rotate(-3deg);
+      clip-path:polygon(0 0,100% 6%,90% 55%,100% 100%,10% 94%)}
+  header h1{
+    position:relative;z-index:1;margin:0;font-size:2.1rem;line-height:1.3;font-weight:900;
+    background:var(--sheet);display:inline-block;padding:10px 20px 12px;
+    box-shadow:3px 4px 0 rgba(0,0,0,.28),6px 9px 14px rgba(0,0,0,.2);
+    transform:rotate(1.2deg);
+    clip-path:polygon(0 3%,5% 0,30% 4%,62% 0,100% 5%,98% 50%,100% 96%,70% 100%,35% 95%,4% 100%,1% 55%);
+  }
+  header p{position:relative;z-index:1;margin:16px 0 0;max-width:30em;font-weight:600}
+
+  .sheet{
+    position:relative;background:var(--sheet);padding:22px 20px 24px;margin:0 0 26px;
+    box-shadow:2px 3px 0 rgba(0,0,0,.18),5px 10px 18px rgba(0,0,0,.22);
+    clip-path:polygon(0 .6%,6% 0,24% .8%,52% 0,81% .7%,100% 0,99.6% 40%,100% 100%,70% 99.3%,40% 100%,12% 99.4%,0 100%,.4% 55%);
+  }
+  .sheet:nth-of-type(odd){transform:rotate(-.4deg)}
+  .sheet:nth-of-type(even){transform:rotate(.4deg)}
+  .tab{
+    display:inline-block;background:var(--ink);color:var(--sheet);font-weight:800;
+    padding:2px 14px;margin:-34px 0 14px;font-size:.95rem;
+    box-shadow:2px 3px 0 rgba(0,0,0,.3);transform:rotate(-1.5deg);
+  }
+  .sheet.red .tab{background:var(--tomato)}
+  .sheet.teal .tab{background:var(--teal)}
+  .sheet.gold .tab{background:var(--mustard);color:var(--ink)}
+
+  label{display:block;font-weight:700;margin:16px 0 4px}
+  .hint{font-weight:400;font-size:.85rem;opacity:.75;display:block}
+  input[type=text],textarea,select{
+    width:100%;font:inherit;color:inherit;background:#fff;
+    border:2px solid var(--ink);padding:10px 12px;border-radius:2px;
+  }
+  textarea{min-height:84px;resize:vertical}
+  input:focus,textarea:focus,select:focus,button:focus-visible,.upload:focus-within{
+    outline:3px solid var(--teal);outline-offset:2px;
+  }
+  .upload{
+    display:block;border:2px dashed var(--ink);padding:14px;text-align:center;cursor:pointer;
+    background:rgba(233,182,47,.18);font-weight:600;
+  }
+  .upload input{display:none}
+  #preview{max-width:140px;max-height:140px;display:none;margin:10px auto 0;border:4px solid #fff;
+    box-shadow:2px 3px 8px rgba(0,0,0,.35);transform:rotate(-2deg)}
+
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+  .chip{
+    font:inherit;font-weight:700;border:2px solid var(--ink);background:#fff;color:var(--ink);
+    padding:4px 14px;cursor:pointer;border-radius:2px;
+  }
+  .chip[aria-pressed=true]{background:var(--ink);color:var(--sheet)}
+
+  .btn{
+    font:inherit;font-weight:800;font-size:1.05rem;color:#fff;background:var(--tomato);
+    border:0;padding:12px 26px;margin-top:22px;cursor:pointer;
+    box-shadow:3px 4px 0 var(--ink);
+  }
+  .btn:active{transform:translate(2px,3px);box-shadow:1px 1px 0 var(--ink)}
+  .btn.alt{background:var(--teal)}
+  .btn[disabled]{opacity:.55;cursor:wait}
+
+  .ack{
+    background:var(--mustard);padding:16px 18px;font-weight:700;border-right:8px solid var(--ink);
+    margin:0 0 26px;box-shadow:2px 3px 0 rgba(0,0,0,.2);
+  }
+  .hidden{display:none}
+  .out{
+    white-space:pre-wrap;background:#fff;border:2px solid var(--ink);padding:14px;margin:0;
+    font-size:.92rem;max-height:420px;overflow:auto;
+  }
+  .out.en{direction:ltr;text-align:left;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.85rem;line-height:1.7}
+  .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:10px}
+  .note{font-size:.85rem;opacity:.8;margin:10px 0 0}
+  .err{color:var(--tomato);font-weight:700}
+  @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+  @media (max-width:480px){header h1{font-size:1.7rem}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <span class="scrap s1"></span><span class="scrap s2"></span><span class="scrap s3"></span>
+    <h1>پرامپت‌ساز کلاژ کاغذی</h1>
+    <p>نام کسب‌وکار یا عکس محصولتان را بدهید؛ پرامپت تصویر و ویدیو در سبک Premium Paper Cut Collage می‌گیرید.</p>
+  </header>
+
+  <!-- مرحله ۱ -->
+  <section class="sheet" id="step1">
+    <span class="tab">مرحله ۱ · اطلاعات اولیه</span>
+    <label for="biz">نام کسب‌وکار یا صنعت فعالیت
+      <span class="hint">مثلاً «کافه‌ی نیلوفر» یا «فروشگاه لوازم ورزشی»</span></label>
+    <input type="text" id="biz" autocomplete="off">
+
+    <label>عکس محصول (اختیاری)</label>
+    <label class="upload" style="margin:0;font-weight:600">
+      برای انتخاب عکس لمس کنید
+      <input type="file" id="photo" accept="image/png,image/jpeg,image/webp,image/gif">
+    </label>
+    <img id="preview" alt="پیش‌نمایش عکس محصول">
+
+    <button class="btn" id="go1">ادامه</button>
+    <p class="err hidden" id="err1">نام کسب‌وکار، صنعت یا یک عکس وارد کنید.</p>
+  </section>
+
+  <!-- تأیید اولیه -->
+  <div class="ack hidden" id="ack">
+    «من نمونه‌های ارائه‌شده در فایل‌های پیوست‌شده‌ام را برای الهام گرفتن از ساختار، کیفیت و سبک بررسی می‌کنم، اما از آن‌ها کپی نخواهم کرد. من یک کانسپت کاملاً منحصربه‌فرد و اختصاصی، ۱۰۰٪ سفارشی، مخصوص برند شما خلق خواهم کرد.»
+  </div>
+
+  <!-- مرحله ۲ -->
+  <section class="sheet red hidden" id="step2">
+    <span class="tab">مرحله ۲ · چند سؤال کوتاه</span>
+    <p style="margin-top:0;font-weight:600">برای اینکه طرح دقیقاً مال برند شما شود، به این پنج سؤال جواب بدهید.</p>
+
+    <label for="q1">۱. چه متن دقیقی (در صورت وجود) باید در اثر هنری درج شود؟
+      <span class="hint">متن را به همان زبان اصلی بنویسید؛ فارسی یا انگلیسی. اگر متنی نمی‌خواهید خالی بگذارید.</span></label>
+    <input type="text" id="q1" autocomplete="off">
+
+    <label for="q2">۲. چه پالت رنگی‌ای را برای برند یا محصول خود ترجیح می‌دهید؟</label>
+    <input type="text" id="q2" placeholder="مثلاً قرمز گوجه‌ای، خردلی و سبزآبی" autocomplete="off">
+
+    <label for="q3">۳. چه اشیاء، نمادها یا عناصر مشخصی باید حتماً در تصویر حضور داشته باشند؟</label>
+    <textarea id="q3"></textarea>
+
+    <label for="q4">۴. می‌خواهید چه حال‌وهوا، احساس یا فضایی را منتقل کنید؟</label>
+    <textarea id="q4"></textarea>
+
+    <label id="q5l">۵. به چه نسبت تصویری (Aspect Ratio) نیاز دارید؟</label>
+    <div class="chips" role="group" aria-labelledby="q5l" id="ratios">
+      <button type="button" class="chip" data-r="16:9" aria-pressed="false">16:9 · دسکتاپ</button>
+      <button type="button" class="chip" data-r="9:16" aria-pressed="false">9:16 · استوری و ریلز</button>
+      <button type="button" class="chip" data-r="4:5" aria-pressed="true">4:5 · اینستاگرام</button>
+      <button type="button" class="chip" data-r="1:1" aria-pressed="false">1:1 · مربع</button>
+    </div>
+
+    <button class="btn" id="go2">ساخت پرامپت‌ها</button>
+  </section>
+
+  <!-- مرحله ۳ -->
+  <div id="step3" class="hidden">
+    <section class="sheet teal">
+      <span class="tab">خروجی ۱ · پرامپت تولید تصویر</span>
+      <pre class="out en" id="out1"></pre>
+      <div class="row"><button class="btn alt" style="margin:0" data-copy="out1">کپی پرامپت تصویر</button></div>
+      <p class="note" id="note1"></p>
+    </section>
+
+    <section class="sheet gold">
+      <span class="tab">خروجی ۲ · پرامپت تولید ویدیو</span>
+      <pre class="out" id="out2"></pre>
+      <div class="row"><button class="btn alt" style="margin:0" data-copy="out2">کپی پرامپت ویدیو</button></div>
+    </section>
+
+    <button class="btn" id="again">شروع دوباره</button>
+  </div>
+</div>
+
+<script>
+/* متن ثابت پرامپت ویدیو: دقیقاً کلمه‌به‌کلمه طبق دستور اصلی */
+const VIDEO_PROMPT = "تصویر آپلودشده را به‌صورت یک مونتاژ کلاژ کاغذی متحرک کنید. کار را با یک پس‌زمینه ساده و خالی که فقط بافتی ظریف دارد، آغاز کنید. هر قطعه مجزای کلاژ را یکی‌یکی وارد صحنه کنید. هر برش، لایه کاغذ، شیء، شخصیت، جزئیات و عنصر پس‌زمینه باید به سمت موقعیت نهایی خود بلغزد، سقوط کند یا به‌آرامی شناور شود. حرکت‌ها را به‌گونه‌ای طراحی کنید که حس قرار گرفتن قطعات واقعی کاغذ در کنار یکدیگر را منتقل کنند. از سایه‌های طبیعی کاغذ، لبه‌های پاره‌شده، عمق اندک، پارالاکس ملایم و نواقص کوچک استفاده کنید. انیمیشن باید به‌تدریج از یک پس‌زمینه خالی به ترکیب‌بندی نهایی کامل برسد. فریم پایانی را دقیقاً مشابه تصویر مرجع آپلودشده نگه دارید. هیچ عنصر جدیدی اضافه نکنید. هیچ عنصری را حذف نکنید. ترکیب‌بندی را تغییر ندهید. شخصیت‌ها، چهره‌ها، اشیاء، رنگ‌ها یا سبک را تغییر ندهید. از حرکت سینمایی روان، حرکت ملایم دوربین، زوم ظریف و بافت کاغذ واقع‌گرایانه استفاده کنید. نتیجه نهایی باید حسی شبیه به یک کلاژ کاغذی دست‌ساز و پریمیوم داشته باشد که قطعه‌به‌قطعه کنار هم شکل می‌گیرد. بدون متن. بدون لوگو. بدون گرافیک اضافی. نسبت تصویر را مشابه تصویر آپلودشده نگه دارید.";
+
+const STYLE_ELEMENTS = [
+  "layered cutout paper elements",
+  "torn paper edges",
+  "handmade paper texture",
+  "realistic paper shadows",
+  "overlapping magazine cutouts",
+  "subtle grain",
+  "halftone texture",
+  "distressed print details",
+  "editorial poster composition"
+];
+
+const $ = id => document.getElementById(id);
+let imageData = null;   // {media_type, data}
+let ratio = "4:5";
+
+/* آپلود عکس */
+$("photo").addEventListener("change", e => {
+  const f = e.target.files[0];
+  if (!f) { imageData = null; $("preview").style.display = "none"; return; }
+  const r = new FileReader();
+  r.onload = () => {
+    $("preview").src = r.result;
+    $("preview").style.display = "block";
+    imageData = { media_type: f.type, data: r.result.split(",")[1] };
+  };
+  r.readAsDataURL(f);
+});
+
+/* مرحله ۱ ← تأیید اولیه + پرسش‌نامه */
+$("go1").addEventListener("click", () => {
+  if (!$("biz").value.trim() && !imageData) { $("err1").classList.remove("hidden"); return; }
+  $("err1").classList.add("hidden");
+  $("ack").classList.remove("hidden");
+  $("step2").classList.remove("hidden");
+  $("go1").disabled = true;
+  $("ack").scrollIntoView({behavior:"smooth", block:"start"});
+});
+
+/* انتخاب نسبت تصویر */
+$("ratios").addEventListener("click", e => {
+  const b = e.target.closest(".chip"); if (!b) return;
+  document.querySelectorAll(".chip").forEach(c => c.setAttribute("aria-pressed", "false"));
+  b.setAttribute("aria-pressed", "true");
+  ratio = b.dataset.r;
+});
+
+/* پرامپت جایگزین (اگر اتصال به Claude برقرار نشد) */
+function fallbackPrompt(a){
+  const textPart = a.text
+    ? `Include this exact text, written precisely as given in its original language (${/[\u0600-\u06FF]/.test(a.text) ? "Persian/Farsi" : "as provided"}): "${a.text}". Render the lettering as cut paper and print-style typography, perfectly legible, with no spelling changes.`
+    : "Do not include any written text in the artwork.";
+  return `A premium paper cut collage artwork for ${a.biz || "the brand shown in the reference photo"}${a.photo ? ", built around the product in the reference photo" : ""}. Style: Premium Paper Cut Collage, ${STYLE_ELEMENTS.join(", ")}.
+
+Scene: ${a.elements || "a bold central hero subject surrounded by symbolic objects of the industry"}, each cut from separate sheets of paper and stacked in overlapping layers with visible depth.
+
+Color palette: ${a.palette || "a harmonious palette chosen to suit the brand"}, applied through colored paper stock, with off-white and kraft paper as supporting tones.
+
+Mood: ${a.mood || "confident, warm and crafted"}.
+
+${textPart}
+
+Composition: editorial poster composition with a clear focal point, strong hierarchy, generous layered overlap, hand-torn edges with white paper fibers showing, soft realistic shadows under every layer, halftone dot patterns and faded print details on the magazine cutouts, fine paper grain over everything.
+
+Aspect ratio ${a.ratio}. Ultra detailed, tactile, handmade look, studio lighting from the top left.`;
+}
+
+/* ساخت پرامپت با Claude */
+async function buildImagePrompt(a){
+  const system = `You are an expert visual prompt engineer specialized in the "Premium Paper Cut Collage" style. Write ONE highly detailed, professional image generation prompt in English that merges the user's answers with this style. It must explicitly include all of these elements in the description: layered cutout paper elements, torn paper edges, handmade paper texture, realistic paper shadows, overlapping magazine cutouts, subtle grain, halftone texture, distressed print details, editorial poster composition. If the user gave text to appear in the image, quote that exact text unchanged in its original language and state which language it is. If no text was given, say there must be no text. State the aspect ratio. The concept must be fully original and custom to the brand. Output only the prompt itself, with no preface, notes or markdown.`;
+  const userText = `Business / industry: ${a.biz || "(see photo)"}
+Exact text to include: ${a.text || "(none)"}
+Color palette: ${a.palette || "(designer's choice)"}
+Required objects/elements: ${a.elements || "(designer's choice)"}
+Mood: ${a.mood || "(designer's choice)"}
+Aspect ratio: ${a.ratio}`;
+  const content = [];
+  if (a.photo) content.push({type:"image", source:{type:"base64", media_type:a.photo.media_type, data:a.photo.data}});
+  content.push({type:"text", text:userText});
+
+  const res = await fetch("https://api.anthropic.com/v1/messages", {
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body: JSON.stringify({
+      model:"claude-sonnet-4-6",
+      max_tokens:1000,
+      system,
+      messages:[{role:"user", content}]
+    })
+  });
+  const data = await res.json();
+  const text = (data.content || []).map(i => i.type === "text" ? i.text : "").join("\n").trim();
+  if (!text) throw new Error("empty");
+  return text;
+}
+
+/* مرحله ۲ ← مرحله ۳ */
+$("go2").addEventListener("click", async () => {
+  const a = {
+    biz: $("biz").value.trim(),
+    photo: imageData,
+    text: $("q1").value.trim(),
+    palette: $("q2").value.trim(),
+    elements: $("q3").value.trim(),
+    mood: $("q4").value.trim(),
+    ratio
+  };
+  const btn = $("go2");
+  btn.disabled = true; btn.textContent = "در حال ساخت…";
+  let prompt, usedFallback = false;
+  try { prompt = await buildImagePrompt(a); }
+  catch(e){ prompt = fallbackPrompt(a); usedFallback = true; }
+
+  $("out1").textContent = prompt;
+  $("out2").textContent = VIDEO_PROMPT;
+  $("note1").textContent = usedFallback
+    ? "اتصال به Claude برقرار نشد؛ این پرامپت از روی قالب آماده ساخته شد."
+    : "";
+  $("step3").classList.remove("hidden");
+  btn.disabled = false; btn.textContent = "ساخت دوباره";
+  $("step3").scrollIntoView({behavior:"smooth", block:"start"});
+});
+
+/* کپی */
+document.addEventListener("click", async e => {
+  const b = e.target.closest("[data-copy]"); if (!b) return;
+  const txt = $(b.dataset.copy).textContent;
+  const old = b.textContent;
+  try { await navigator.clipboard.writeText(txt); b.textContent = "کپی شد"; }
+  catch(_){
+    const r = document.createRange(); r.selectNodeContents($(b.dataset.copy));
+    const s = getSelection(); s.removeAllRanges(); s.addRange(r);
+    b.textContent = "متن انتخاب شد؛ کپی کنید";
+  }
+  setTimeout(() => b.textContent = old, 1800);
+});
+
+/* شروع دوباره */
+$("again").addEventListener("click", () => location.reload());
+</script>
+</body>
+</html>
